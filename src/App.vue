@@ -1,46 +1,36 @@
 <script setup>
+import { setConstantValue } from 'typescript';
 import { reactive } from 'vue';
 
   const state = reactive({
-    plus: '',
+    plus: '-',
     result: '',
     filter: 'sum',
-    input1: '30',
-    input2: '',
+    input1: '0',
+    input2: '0',
   })
-
-  function calcSum() {
-    return state.result =  state.input1 + state.input2
+  
+  function execInput(x, event) {
+    state.input1 = event.target.value
+    calc()
   }
 
-  function calcSubtraction() {
-    return state.result =  state.input1 - state.input2
-  }
-
-  function calcMutiplication() {
-    return state.result =  state.input1 * state.input2
-  }
-
-  function calcDivision() {
-    return state.result =  state.input1 / state.input2
-  }
-
-  const getSetCalc = () => {
+  const calc = () => {
     const { filter } = state;
-    let setCalc;
 
     switch (filter) {
       case 'subtraction':
-        return setCalc = calcSubtraction();
+        state.result = parseFloat(state.input1) - parseFloat(state.input2);
+        break
       case 'mutiplication':
-        return setCalc = calcMutiplication();
+        state.result = calcMutiplication();
+        break
       case 'division':
-        return setCalc = calcDivision();
+        state.result = calcDivision();
       default:
-        return setCalc = calcSum();
+        state.result = parseFloat(state.input1)  + parseFloat(state.input2);
     }
   }
-  console.log(state.input2)
 </script>
 
 <template>
@@ -51,9 +41,9 @@ import { reactive } from 'vue';
         <option value="mutiplication">Mutiplication</option>
         <option value="division">Division</option>
       </select>
-      <input :value="state.input1" class="ms-2" type="text">
-      <p class="ms-2">{{ state.plus }}</p>
-      <input :value="state.input2" class="ms-2" type="text">
+      <input @keyup="execInput1" class="ms-2" type="text">
+      <p class="ms-2">{{ }}</p>
+      <input @keyup="execInput2" class="ms-2" type="text">
       <p class="ms-2">{{ state.result }}</p>
   </div>
 </template>
