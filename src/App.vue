@@ -1,19 +1,44 @@
+<!-- 
+  [P] not NaNumber
+  [P] render plus active switch
+  switch calc real time
+  design
+-->
+
 <script setup>
 import { setConstantValue } from 'typescript';
 import { reactive } from 'vue';
 
   const state = reactive({
-    plus: '-',
+    operation: '+',
     result: '',
     filter: 'sum',
     input1: '0',
     input2: '0',
   })
+
+  function changeOperation(event) {
+    state.filter = event.target.value
+    state.operation = event.target.value
+  }
   
-  function execInput(x, event) {
-    state.input1 = event.target.value
+  function execInput(event) {
+    if(event.target.id === 'input1') {
+      state.input1 = event.target.value
+    }else {
+      state.input2 = event.target.value
+    }
+    if(state.input1 === '') {
+      state.input1 = 0
+      state.input1 - state.input2
+    } else if(state.input2 === '') {
+      state.input2 = 0
+      state.input1 - state.input2
+    }
     calc()
   }
+
+  
 
   const calc = () => {
     const { filter } = state;
@@ -23,10 +48,10 @@ import { reactive } from 'vue';
         state.result = parseFloat(state.input1) - parseFloat(state.input2);
         break
       case 'mutiplication':
-        state.result = calcMutiplication();
+        state.result = parseFloat(state.input1) * parseFloat(state.input2);
         break
       case 'division':
-        state.result = calcDivision();
+        state.result = parseFloat(state.input1) / parseFloat(state.input2);
       default:
         state.result = parseFloat(state.input1)  + parseFloat(state.input2);
     }
@@ -35,15 +60,15 @@ import { reactive } from 'vue';
 
 <template>
   <div class="container vh-100 d-flex justify-content-center align-items-center">
-      <select @change="event => state.filter = event.target.value" class="">
-        <option value="sum">Sum</option>
-        <option value="subtraction">Subtraction</option>
-        <option value="mutiplication">Mutiplication</option>
-        <option value="division">Division</option>
+      <select @change="changeOperation" class="">
+        <option value="+">Sum</option>
+        <option value="-">Subtraction</option>
+        <option value="x">Mutiplication</option>
+        <option value="/">Division</option>
       </select>
-      <input @keyup="execInput1" class="ms-2" type="text">
-      <p class="ms-2">{{ }}</p>
-      <input @keyup="execInput2" class="ms-2" type="text">
+      <input id="input1" @keyup="execInput" value="" class="ms-2" type="text">
+      <p class="ms-2">{{ state.operation }}</p>
+      <input id="input2" @keyup="execInput" class="ms-2" type="text">
       <p class="ms-2">{{ state.result }}</p>
   </div>
 </template>
